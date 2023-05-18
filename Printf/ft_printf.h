@@ -18,8 +18,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
-# include "../gnl/get_next_line.h"
-# include "../Printf/ft_printf.h"
 
 typedef struct s_args
 {

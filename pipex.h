@@ -1,7 +1,8 @@
 #ifndef PIPEX_H
 #define PIPEX_H
-
-#include "libft/libft.h"
+# include <fcntl.h>
+# include "Libft/libft.h"
+# include "Printf/ft_printf.h"
 
 typedef enum	e_boolean
 {
