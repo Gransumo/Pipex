@@ -45,7 +45,7 @@ t_boolean error_checker(int argc, char **argv)
 {
 	if (argc < 5)
 		return (error("MISSING ARGS"));
-	if (!is_file(argv[1]) || !is_file(argv[argc - 1]))
+	if (!is_file(argv[1]))
 		return (FALSE);
 	return (TRUE);
 }

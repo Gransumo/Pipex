@@ -1,8 +1,8 @@
 CC			= gcc
-CFLAGS		= -Wall -Werror -Wextra -fsanitize=address -g #-glldb
+CFLAGS		= -Wall -Werror -Wextra #-fsanitize=address -g #-glldb
 RM			= rm -f
 NAME		= pipex
-SRCS		= pipex.c error.c
+SRCS		= pipex.c error.c executables.c utils.c
 OBJS		= ${SRCS:.c=.o}
 AR			= ar rc
 
