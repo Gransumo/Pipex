@@ -31,9 +31,20 @@ void	cmd_error(char *cmd)
 
 t_boolean	error_checker(int argc, char **argv)
 {
+	char	*err_message;
+
+	err_message = NULL;
 	if (argc < 5)
 		return (error ("MISSING ARGS"));
 	if (!is_file (argv[1]))
 		return (FALSE);
+	if (access(argv[1], R_OK) != 0)
+	{
+		err_message = ft_strjoin(argv[1], " DOESN'T HAVE PERMISSIONS ENABLED");
+		error (err_message);
+		free(err_message);
+		return (FALSE);
+	}
+	
 	return (TRUE);
 }

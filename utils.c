@@ -92,8 +92,9 @@ t_boolean	is_file(char *file)
 	char		*err_message;
 
 	checker = TRUE;
-	err_message = ft_strjoin (file, " FILE DON'T EXIST");
-	fd = open (file, O_RDONLY);
+	err_message = ft_strjoin (file, \
+	" FILE DOESN'T EXIST OR DOESN'T HAVE PERMISSIONS ENABLED");
+	fd = open (file, O_RDONLY | R_OK);
 	if (fd < 0)
 		checker = error (err_message);
 	close (fd);
