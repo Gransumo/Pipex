@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-t_boolean	is_file(char *file);
+t_boolean	is_file(t_pipex *pipex, char *file);
 
 int	error(char *message)
 {
@@ -29,22 +29,14 @@ void	cmd_error(char *cmd)
 	free (err_message);
 }
 
-t_boolean	error_checker(int argc, char **argv)
+t_boolean	error_checker(t_pipex *pipex, int argc, char **argv)
 {
 	char	*err_message;
 
 	err_message = NULL;
 	if (argc < 5)
 		return (error ("MISSING ARGS"));
-	if (!is_file (argv[1]))
+	if (!is_file (pipex, argv[INFILE]))
 		return (FALSE);
-	if (access(argv[1], R_OK) != 0)
-	{
-		err_message = ft_strjoin(argv[1], " DOESN'T HAVE PERMISSIONS ENABLED");
-		error (err_message);
-		free(err_message);
-		return (FALSE);
-	}
-	
 	return (TRUE);
 }

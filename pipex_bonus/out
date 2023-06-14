@@ -1,0 +1,16 @@
+total 208
+drwxr-xr-x  29 gcastro-  2019    986 Jun 14 22:01 Libft
+-rw-r--r--   1 gcastro-  2019    828 Jun  6 18:51 Makefile
+drwxr-xr-x  17 gcastro-  2019    578 Jun 14 22:01 Printf
+-rw-r--r--   1 gcastro-  2019   1377 Jun 14 18:49 error.c
+-rw-r--r--   1 gcastro-  2019   5668 Jun 14 22:01 error.o
+-rw-r--r--   1 gcastro-  2019   2289 Jun  6 19:24 executables.c
+-rw-r--r--   1 gcastro-  2019   9148 Jun 14 22:01 executables.o
+drwxr-xr-x   5 gcastro-  2019    170 May 11 17:59 gnl
+-rwxr-xr-x   1 gcastro-  2019      0 Jun 14 22:01 out
+-rwxr-xr-x   1 gcastro-  2019  39772 Jun 14 22:01 pipex
+-rw-r--r--   1 gcastro-  2019   1797 Jun  6 18:51 pipex.c
+-rw-r--r--   1 gcastro-  2019   1676 Jun 14 20:11 pipex.h
+-rw-r--r--   1 gcastro-  2019   6776 Jun 14 22:01 pipex.o
+-rw-r--r--   1 gcastro-  2019   2223 Jun 13 19:27 utils.c
+-rw-r--r--   1 gcastro-  2019   9176 Jun 14 22:01 utils.o
