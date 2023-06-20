@@ -13,10 +13,10 @@
 #include <stdio.h>
 #include "pipex.h"
 
-/* void ft_leaks()
+void ft_leaks()
 {
 	system("leaks pipex");
-} */
+}
 /*  void ft_pmatrix(char **mat)
 {
 	int i = 0;
@@ -41,11 +41,11 @@ t_pipex	init_pvars(int argc, char **argv, char **envp)
 	return (pipex);
 }
 
-//atexit(ft_leaks);
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex		pipex;
 
+	atexit(ft_leaks);
 	if (error_checker (argc, argv) == FALSE)
 		return (0);
 	pipex = init_pvars (argc, argv, envp);

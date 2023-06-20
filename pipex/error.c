@@ -34,8 +34,8 @@ t_boolean	error_checker(t_pipex *pipex, int argc, char **argv)
 	char	*err_message;
 
 	err_message = NULL;
-	if (argc < 5)
-		return (error ("MISSING ARGS"));
+	if (argc != 5)
+		return (error ("INVALID ARGS NUM"));
 	if (!is_file (pipex, argv[INFILE]))
 		return (FALSE);
 	return (TRUE);

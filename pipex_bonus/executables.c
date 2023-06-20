@@ -86,6 +86,5 @@ void	last_exc(t_pipex *pipex, char *argv)
 	else
 	{
 		close (pipex->fd[READ_FD]);
-		waitpid (pid, NULL, 0);
 	}
 }

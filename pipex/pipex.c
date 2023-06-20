@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 	pid = fork();
 	if (pid == -1)
 		return (error("FORK ERROR"));
-	if (pid == 0)
+	else if (pid == 0)
 		ex_first_cmd(fd, &pipex);
 	else
 	{
@@ -63,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 		pid = fork();
 		if (pid == -1)
 			return (error("SECOND FORK ERROR"));
-		if (pid == 0)
+		else if (pid == 0)
 			ex_last_cmd(fd, &pipex);
 		else
 			finish(fd);
