@@ -41,9 +41,9 @@ typedef struct s_pipex
 void		ft_pipex(t_pipex *pipex, char *cmd);
 void		ex_cmd(t_pipex *pipex, char *cmd);
 void		init_exc(t_pipex *pipex, char **argv);
-void		last_exc(t_pipex *pipex, char *argv);
+int			last_exc(t_pipex *pipex, char *argv);
 int			error(char *message);
-t_boolean	error_checker(int argc, char **argv);
+void		print_warning(char	*message);
 void		ft_free(char **matrix);
 char		**get_path(char **envp);
 char		*get_cmd_path(t_pipex *pipex, char *cmd);

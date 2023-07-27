@@ -17,13 +17,13 @@ void	ex_cmd(t_pipex *pipex, char *cmd)
 	char	**exe;
 	char	*cmd_path;
 
-	exe = ft_split (cmd, ' ');
+	exe = is_awk();
+	if (!exe)
+		exe = ft_split (cmd, ' ');
 	cmd_path = get_cmd_path (pipex, exe[0]);
 	if (cmd_path == NULL)
 		exit (0);
 	execve (cmd_path, exe, pipex->envp);
-	free (cmd_path);
-	ft_free (exe);
 }
 
 void	ft_pipex(t_pipex *pipex, char *cmd)
@@ -47,6 +47,7 @@ void	ft_pipex(t_pipex *pipex, char *cmd)
 		close (pipex->fd[READ_FD]);
 		close (fd[WRITE_FD]);
 		dup2 (fd[READ_FD], pipex->fd[READ_FD]);
+		close (fd[READ_FD]);
 		waitpid (pid, NULL, 0);
 	}
 }
@@ -62,19 +63,21 @@ void	init_exc(t_pipex *pipex, char **argv)
 		close (pipex->fd[READ_FD]);
 		dup2 (pipex->infile_fd, STDIN_FILENO);
 		dup2 (pipex->fd[WRITE_FD], STDOUT_FILENO);
-		close (pipex->fd[WRITE_FD]);
 		close (pipex->infile_fd);
+		close (pipex->fd[WRITE_FD]);
 		ex_cmd (pipex, argv[2]);
 	}
 	else
 		close (pipex->fd[WRITE_FD]);
 }
 
-void	last_exc(t_pipex *pipex, char *argv)
+int	last_exc(t_pipex *pipex, char *argv)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = fork ();
+	status = 0;
 	if (pid == 0)
 	{
 		dup2 (pipex->fd[READ_FD], STDIN_FILENO);
@@ -86,5 +89,7 @@ void	last_exc(t_pipex *pipex, char *argv)
 	else
 	{
 		close (pipex->fd[READ_FD]);
+		waitpid(pid, &status, 0);
 	}
+	return (status);
 }

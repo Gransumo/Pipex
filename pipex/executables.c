@@ -12,12 +12,6 @@
 
 #include "pipex.h"
 
-void	finish(int *fd)
-{
-	close(fd[READ_FD]);
-	exit(0);
-}
-
 void	ex_cmd(t_pipex *pipex, char *cmd)
 {
 	char	**exe;
@@ -28,24 +22,69 @@ void	ex_cmd(t_pipex *pipex, char *cmd)
 	if (cmd_path == NULL)
 		exit (0);
 	execve (cmd_path, exe, pipex->envp);
-	free (cmd_path);
-	ft_free (exe);
 }
 
-void	ex_first_cmd(int *fd, t_pipex *pipex)
+void	ft_pipex(t_pipex *pipex, char *cmd)
 {
-	close(fd[READ_FD]);
-	dup2(pipex->infile_fd, STDIN_FILENO);
-	dup2(fd[WRITE_FD], STDOUT_FILENO);
-	close(fd[WRITE_FD]);
-	ex_cmd(pipex, pipex->argv[2]);
+	pid_t	pid;
+	int		fd[2];
+
+	pipe (fd);
+	pid = fork ();
+	if (pid == 0)
+	{
+		close (fd[READ_FD]);
+		dup2 (pipex->fd[READ_FD], STDIN_FILENO);
+		dup2 (fd[WRITE_FD], STDOUT_FILENO);
+		close (pipex->fd[READ_FD]);
+		close (fd[WRITE_FD]);
+		ex_cmd (pipex, cmd);
+	}
+	else
+	{
+		close (pipex->fd[READ_FD]);
+		close (fd[WRITE_FD]);
+		dup2 (fd[READ_FD], pipex->fd[READ_FD]);
+		close (fd[READ_FD]);
+		waitpid (pid, NULL, 0);
+	}
 }
 
-void	ex_last_cmd(int *fd, t_pipex *pipex)
+void	init_exc(t_pipex *pipex, char **argv)
 {
-	dup2(fd[READ_FD], STDIN_FILENO);
-	close(fd[READ_FD]);
-	dup2(pipex->outfile_fd, STDOUT_FILENO);
-	close(pipex->outfile_fd);
-	ex_cmd(pipex, pipex->argv[3]);	
+	pid_t	pid;
+
+	pipe (pipex->fd);
+	pid = fork ();
+	if (pid == 0)
+	{
+		close (pipex->fd[READ_FD]);
+		dup2 (pipex->infile_fd, STDIN_FILENO);
+		dup2 (pipex->fd[WRITE_FD], STDOUT_FILENO);
+		close (pipex->infile_fd);
+		close (pipex->fd[WRITE_FD]);
+		ex_cmd (pipex, argv[2]);
+	}
+	else
+		close (pipex->fd[WRITE_FD]);
+}
+
+void	last_exc(t_pipex *pipex, char *argv)
+{
+	pid_t	pid;
+
+	pid = fork ();
+	if (pid == 0)
+	{
+		dup2 (pipex->fd[READ_FD], STDIN_FILENO);
+		dup2 (pipex->outfile_fd, STDOUT_FILENO);
+		close (pipex->outfile_fd);
+		close (pipex->fd[READ_FD]);
+		ex_cmd (pipex, argv);
+	}
+	else
+	{
+		close (pipex->fd[READ_FD]);
+		waitpid(pid, NULL, 0);
+	}
 }

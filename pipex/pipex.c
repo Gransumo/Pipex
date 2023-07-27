@@ -13,10 +13,10 @@
 #include <stdio.h>
 #include "pipex.h"
 
-void ft_leaks()
+/* void ft_leaks()
 {
 	system("leaks pipex");
-}
+} */
 /*  void ft_pmatrix(char **mat)
 {
 	int i = 0;
@@ -27,46 +27,51 @@ void ft_leaks()
 		i++;
 	}
 } */
-void	finish(int *fd);
-
-void	init_pvars(t_pipex *pipex, int argc,  char **argv, char **envp)
+t_pipex	init_pvars(int argc, char **argv, char **envp)
 {
-	if (error_checker (pipex, argc, argv) == FALSE)
-		exit(0);
-	pipex->outfile_fd = open (argv[OUTFILE], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pipex->outfile_fd == -1)
-		exit(0);
-	pipex->argv = argv;
-	pipex->path = get_path (envp);
-	pipex->envp = envp;
+	t_pipex	pipex;
+
+	pipex.infile = argv[1];
+	pipex.outfile = argv[argc - 1];
+	pipex.infile_fd = open (pipex.infile, O_RDONLY);
+	pipex.outfile_fd = open (pipex.outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pipex.infile_fd < 0 || pipex.outfile_fd < 0)
+		print_warning("A FILE DOESN'T EXIST OR DOESN'T HAVE PERMISSIONS \
+						ENABLED");
+	pipex.path = get_path (envp);
+	pipex.envp = envp;
+	pipex.iter = 3;
+	return (pipex);
 }
 
-
+/* ------NORMAL------- */
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex		pipex;
-	pid_t		pid;
-	int			fd[2];
 
-	atexit(ft_leaks);
-	init_pvars(&pipex, argc, argv, envp);
-	if(pipe(fd) == -1)
-		return (error("PIPE ERROR"));
-	pid = fork();
-	if (pid == -1)
-		return (error("FORK ERROR"));
-	else if (pid == 0)
-		ex_first_cmd(fd, &pipex);
-	else
-	{
-		close(fd[WRITE_FD]);
-		pid = fork();
-		if (pid == -1)
-			return (error("SECOND FORK ERROR"));
-		else if (pid == 0)
-			ex_last_cmd(fd, &pipex);
-		else
-			finish(fd);
-	}
+	if (argc != 5)
+		return (error("WRONG ARGS NUMBER\n"));
+	pipex = init_pvars (argc, argv, envp);
+	init_exc (&pipex, argv);
+	while (pipex.iter < argc - 2)
+		ft_pipex (&pipex, argv[pipex.iter++]);
+	last_exc (&pipex, argv[argc - 2]);
+	ft_free (pipex.path);
 	return (0);
 }
+
+/* ------BONUS------ */
+/* int	main(int argc, char **argv, char **envp)
+{
+	t_pipex		pipex;
+
+	if (argc < 5)
+		return (error("WRONG ARGS NUMBER\n"));
+	pipex = init_pvars (argc, argv, envp);
+	init_exc (&pipex, argv);
+	while (pipex.iter < argc - 2)
+		ft_pipex (&pipex, argv[pipex.iter++]);
+	last_exc (&pipex, argv[argc - 2]);
+	ft_free (pipex.path);
+	return (0);
+} */

@@ -84,19 +84,3 @@ char	*get_cmd_path(t_pipex *pipex, char *cmd)
 	}
 	return (NULL);
 }
-
-t_boolean	is_file(t_pipex *pipex, char *file)
-{
-	t_boolean	checker;
-	char		*err_message;
-
-	checker = TRUE;
-	err_message = ft_strjoin (file, \
-	" FILE DOESN'T EXIST OR DOESN'T HAVE PERMISSIONS ENABLED");
-	pipex->infile_fd = open (file, O_RDONLY | R_OK);
-	if (pipex->infile_fd == -1)
-		checker = error (err_message);
-	close (pipex->infile_fd);
-	free (err_message);
-	return (checker);
-}

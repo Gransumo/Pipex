@@ -12,12 +12,15 @@
 
 #include "pipex.h"
 
-t_boolean	is_file(char *file);
-
 int	error(char *message)
 {
 	ft_printf ("ERROR\n%s\n", message);
 	return (0);
+}
+
+void	print_warning(char	*message)
+{
+	ft_printf ("WARNING\n%s\n", message);
 }
 
 void	cmd_error(char *cmd)
@@ -27,16 +30,4 @@ void	cmd_error(char *cmd)
 	err_message = ft_strjoin (cmd, "COMMAND NOT FOUND\n");
 	error (err_message);
 	free (err_message);
-}
-
-t_boolean	error_checker(int argc, char **argv)
-{
-	char	*err_message;
-
-	err_message = NULL;
-	if (argc < 5)
-		return (error ("MISSING ARGS"));
-	if (!is_file (argv[1]))
-		return (FALSE);
-	return (TRUE);
 }
